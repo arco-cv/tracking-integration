@@ -1,6 +1,6 @@
 
 # Documentação Técnica Tracking
-> O Objetivo deste documento é ajudar tecnicamente as transportadoras a realizarem a integração de envio de ocorrência de transportes para Arco.
+> O Objetivo deste documento é ajudar tecnicamente as transportadoras na integração de envio de ocorrência de transportes para Arco.
 
 ### Especificação técnica (Payload):
 [(https://integrator.qa.arcocv.co/v1/docs/tracking-external)](https://integrator.qa.arcocv.co/v1/docs/tracking-external)
