@@ -15,7 +15,7 @@
 TODO
 
 ### Chave de Acesso `x-api-key`
-Envie um email para [transportes@arcoeducacao.com.br](transportes@arcoeducacao.com.br) que receberá a chave de acesso para testes
+Enviar e-mail solicitando a chave de acesso para geovaneprovin@arcoeducacao.com.br e especificar o ambiente `testes ou produção`
 
 ### Exemplos de Códigos
 - [JavaScript](JavaScript)
