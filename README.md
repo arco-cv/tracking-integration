@@ -6,7 +6,7 @@
 [https://tracking.arcoeducacao.com.br/v1/docs](https://tracking.arcoeducacao.com.br/v1/docs)
 
 ###  URL do ambiente de teste
-[http://supply-api-gw.stage.arcocv.co/](http://supply-api-gw.stage.arcocv.co/)
+[http://supply-api-gw.stage.arcocv.co/v1/tracking/events](http://supply-api-gw.stage.arcocv.co/v1/tracking/events)
 
 ### URL do ambiente de produção
 [https://tracking.arcoeducacao.com.br/v1/tracking/events](https://tracking.arcoeducacao.com.br/v1/tracking/events)
