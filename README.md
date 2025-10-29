@@ -3,10 +3,10 @@
 > O Objetivo deste documento é ajudar tecnicamente as transportadoras na integração de envio de ocorrência de transportes para Arco.
 
 ### Especificação técnica (Payload):
-[(https://integrator.qa.arcocv.co/v1/docs/tracking-external)](https://integrator.qa.arcocv.co/v1/docs/tracking-external)
+[https://tracking.arcoeducacao.com.br/v1/docs](https://tracking.arcoeducacao.com.br/v1/docs)
 
 ###  URL do ambiente de teste
-[https://integrator.qa.arcocv.co/v1/tracking/events](https://integrator.qa.arcocv.co/v1/tracking/events)
+[http://supply-api-gw.stage.arcocv.co/](http://supply-api-gw.stage.arcocv.co/)
 
 ### URL do ambiente de produção
 [https://tracking.arcoeducacao.com.br/v1/tracking/events](https://tracking.arcoeducacao.com.br/v1/tracking/events)
