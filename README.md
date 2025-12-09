@@ -18,10 +18,9 @@ TODO
 Enviar e-mail solicitando a chave de acesso para geovaneprovin@arcoeducacao.com.br e especificar o ambiente `testes ou produção`
 
 ### Exemplos de Códigos
-- [JavaScript](JavaScript)
-- [Python](Python)
-- [PHP](PHP)
-- [Java](Java)
+- [Node.js](nodejs/)
+- [Python](python/)
+- [PHP](php/)
   
 ### Código das ocorrências
 Na Arco já temos um padrão de códigos e descrições que devemos receber para melhor gestão das notas fiscais pelo time de Transporte.
