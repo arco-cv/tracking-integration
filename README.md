@@ -3,7 +3,7 @@
 > O Objetivo deste documento é ajudar tecnicamente as transportadoras na integração de envio de ocorrência de transportes para Arco.
 
 ### Especificação técnica (Payload):
-[https://tracking.arcoeducacao.com.br/v1/docs](https://tracking.arcoeducacao.com.br/v1/docs)
+[https://arco-cv.github.io/tracking-integration](https://arco-cv.github.io/tracking-integration/)
 
 ###  URL do ambiente de teste
 [http://supply-api-gw.stage.arcocv.co/v1/tracking/events](http://supply-api-gw.stage.arcocv.co/v1/tracking/events)
@@ -21,11 +21,11 @@ Enviar e-mail solicitando a chave de acesso para geovaneprovin@arcoeducacao.com.
 - [Node.js](nodejs/)
 - [Python](python/)
 - [PHP](php/)
-  
+
 ### Código das ocorrências
 Na Arco já temos um padrão de códigos e descrições que devemos receber para melhor gestão das notas fiscais pelo time de Transporte.
 
-Abaixo você pode ver a lista que deve ser implementada com seus significados. Nenhum código diferente desses deverá ser enviado. Esses dados devem ser usados para preencher os campos: `status`, `codigo_status`, `events.codigo` e `events.descricao_codigo`. É possível ver um exemplo [neste link](https://1ciiwix04k.execute-api.us-east-1.amazonaws.com/prod/v1/docs-tracking-external-openapi).
+Abaixo você pode ver a lista que deve ser implementada com seus significados. Nenhum código diferente desses deverá ser enviado. Esses dados devem ser usados para preencher os campos: `status`, `codigo_status`, `events.codigo` e `events.descricao_codigo`.
 
 | Código | Descrição |
 | --- | --- |
