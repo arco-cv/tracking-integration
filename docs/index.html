@@ -262,6 +262,7 @@
   <!-- Request Body -->
   <div class="card">
     <h2>Request Body <span style="font-weight:400;color:#94a3b8;font-size:0.8rem;text-transform:none;letter-spacing:0">application/json</span></h2>
+    <p style="font-size:0.88rem;color:#475569;margin-bottom:16px;">All datetime fields must be ISO 8601 with an explicit timezone: UTC suffix <code>Z</code> (e.g. <code>2024-09-19T15:34:56Z</code>) or offset <code>±HH:MM</code> (e.g. <code>2024-09-19T12:34:56-03:00</code>). Values without <code>Z</code> or offset are rejected by the API.</p>
 
     <table>
       <thead>
@@ -275,7 +276,7 @@
         <tr>
           <td><span class="field-name">data_geracao_evento</span><span class="required">required</span></td>
           <td><span class="type">string</span></td>
-          <td>Event generation datetime in ISO 8601 format.<br><small style="color:#94a3b8">e.g. <code>2024-09-19T12:34:56</code></small></td>
+          <td>Event generation datetime in ISO 8601 format (must include <code>Z</code> or offset).<br><small style="color:#94a3b8">e.g. <code>2024-09-19T12:34:56-03:00</code></small></td>
         </tr>
         <tr>
           <td><span class="field-name">transportadora</span></td>
@@ -295,7 +296,7 @@
         <tr>
           <td><span class="field-name">emissao_conhecimento</span><span class="required">required</span></td>
           <td><span class="type">string</span></td>
-          <td>Issue date of the bill of lading (Conhecimento de Transporte), in ISO 8601.<br><small style="color:#94a3b8">e.g. <code>2024-09-18T10:20:30</code></small></td>
+          <td>Issue date of the bill of lading (Conhecimento de Transporte), in ISO 8601 (must include <code>Z</code> or offset).<br><small style="color:#94a3b8">e.g. <code>2024-09-18T10:20:30-03:00</code></small></td>
         </tr>
         <tr>
           <td><span class="field-name">remetente</span><span class="required">required</span></td>
@@ -316,14 +317,14 @@
           <td>Sender's CNPJ (14 digits).<br><small style="color:#94a3b8">e.g. <code>98765432000100</code></small></td>
         </tr>
         <tr>
-          <td><span class="field-name">previsao_de_entrega</span><span class="required">required</span></td>
+          <td><span class="field-name">previsao_de_entrega</span></td>
           <td><span class="type">string | null</span></td>
-          <td>Estimated delivery datetime in ISO 8601. Send <code>null</code> if not available.<br><small style="color:#94a3b8">e.g. <code>2024-03-26T16:15:27</code></small></td>
+          <td>Estimated delivery datetime in ISO 8601 (must include <code>Z</code> or offset). Omit the field or send <code>null</code> if not available.<br><small style="color:#94a3b8">e.g. <code>2024-03-26T16:15:27-03:00</code></small></td>
         </tr>
         <tr>
-          <td><span class="field-name">data_de_entrega</span><span class="required">required</span></td>
+          <td><span class="field-name">data_de_entrega</span></td>
           <td><span class="type">string | null</span></td>
-          <td>Effective delivery datetime in ISO 8601. Send <code>null</code> if the delivery hasn't occurred yet.<br><small style="color:#94a3b8">e.g. <code>2024-03-27T16:15:27</code></small></td>
+          <td>Effective delivery datetime in ISO 8601 (must include <code>Z</code> or offset) when the delivery is completed. If there is no delivery yet, send <code>null</code> or omit this field — both are accepted.<br><small style="color:#94a3b8">e.g. <code>2024-03-27T16:15:27-03:00</code></small></td>
         </tr>
         <tr>
           <td><span class="field-name">status</span><span class="required">required</span></td>
@@ -346,7 +347,7 @@
         <tr style="background:#fafafa;">
           <td style="padding-left:32px"><span class="field-name">data_hora</span><span class="required">required</span></td>
           <td><span class="type">string</span></td>
-          <td>Datetime of the event in ISO 8601.<br><small style="color:#94a3b8">e.g. <code>2024-03-20T17:38:36</code></small></td>
+          <td>Datetime of the event in ISO 8601 (must include <code>Z</code> or offset).<br><small style="color:#94a3b8">e.g. <code>2024-03-20T17:38:36-03:00</code></small></td>
         </tr>
         <tr style="background:#fafafa;">
           <td style="padding-left:32px"><span class="field-name">codigo</span><span class="required">required</span></td>
@@ -371,28 +372,28 @@
   <div class="card">
     <h2>Request Example</h2>
     <pre><span class="key">{
-  "data_geracao_evento"</span>: <span class="str">"2024-09-19T12:34:56"</span>,
+  "data_geracao_evento"</span>: <span class="str">"2024-09-19T12:34:56-03:00"</span>,
   <span class="key">"transportadora"</span>: <span class="str">"Gbex"</span>,
   <span class="key">"cnpj_transportadora"</span>: <span class="str">"12345678901234"</span>,
   <span class="key">"nota_fiscal"</span>: <span class="str">"123456"</span>,
-  <span class="key">"emissao_conhecimento"</span>: <span class="str">"2024-09-18T10:20:30"</span>,
+  <span class="key">"emissao_conhecimento"</span>: <span class="str">"2024-09-18T10:20:30-03:00"</span>,
   <span class="key">"remetente"</span>: {
     <span class="key">"nome"</span>: <span class="str">"SAE"</span>,
     <span class="key">"cnpj"</span>: <span class="str">"98765432000100"</span>
   },
-  <span class="key">"previsao_de_entrega"</span>: <span class="str">"2024-03-26T16:15:27"</span>,
-  <span class="key">"data_de_entrega"</span>: <span class="str">"2024-03-27T16:15:27"</span>,
+  <span class="key">"previsao_de_entrega"</span>: <span class="str">"2024-03-26T16:15:27-03:00"</span>,
+  <span class="key">"data_de_entrega"</span>: <span class="str">"2024-03-27T16:15:27-03:00"</span>,
   <span class="key">"status"</span>: <span class="str">"ENTREGA REALIZADA NORMALMENTE"</span>,
   <span class="key">"codigo_status"</span>: <span class="str">"1"</span>,
   <span class="key">"events"</span>: [
     {
-      <span class="key">"data_hora"</span>: <span class="str">"2024-03-20T17:38:36"</span>,
+      <span class="key">"data_hora"</span>: <span class="str">"2024-03-20T17:38:36-03:00"</span>,
       <span class="key">"codigo"</span>: <span class="str">"40"</span>,
       <span class="key">"descricao_codigo"</span>: <span class="str">"EM ROTA"</span>,
       <span class="key">"descricao"</span>: <span class="str">"Mercadoria saiu para entrega - Placa CLF9G72"</span>
     },
     {
-      <span class="key">"data_hora"</span>: <span class="str">"2024-03-26T16:15:27"</span>,
+      <span class="key">"data_hora"</span>: <span class="str">"2024-03-26T16:15:27-03:00"</span>,
       <span class="key">"codigo"</span>: <span class="str">"1"</span>,
       <span class="key">"descricao_codigo"</span>: <span class="str">"ENTREGA REALIZADA NORMALMENTE"</span>,
       <span class="key">"descricao"</span>: <span class="str">"Entrega efetuada com sucesso"</span>
