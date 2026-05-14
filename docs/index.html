@@ -1,377 +1,597 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tracking API</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tracking API</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-    body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      background: #f4f6f9;
-      color: #1e293b;
-      line-height: 1.6;
-    }
+      body {
+        font-family: "Segoe UI", system-ui, sans-serif;
+        background: #f4f6f9;
+        color: #1e293b;
+        line-height: 1.6;
+      }
 
-    header {
-      background: #1e40af;
-      color: white;
-      padding: 32px 40px;
-    }
-    header h1 { font-size: 1.6rem; font-weight: 700; }
-    header p { margin-top: 6px; opacity: 0.85; font-size: 0.95rem; }
+      header {
+        background: #1e40af;
+        color: white;
+        padding: 32px 40px;
+      }
+      header h1 {
+        font-size: 1.6rem;
+        font-weight: 700;
+      }
+      header p {
+        margin-top: 6px;
+        opacity: 0.85;
+        font-size: 0.95rem;
+      }
 
-    .badge {
-      display: inline-block;
-      background: #22c55e;
-      color: white;
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 3px 9px;
-      border-radius: 4px;
-      letter-spacing: 0.05em;
-      vertical-align: middle;
-      margin-right: 8px;
-    }
+      .badge {
+        display: inline-block;
+        background: #22c55e;
+        color: white;
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 3px 9px;
+        border-radius: 4px;
+        letter-spacing: 0.05em;
+        vertical-align: middle;
+        margin-right: 8px;
+      }
 
-    .container {
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 0 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
+      .container {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 0 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
 
-    .card {
-      background: white;
-      border-radius: 10px;
-      padding: 28px 32px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-    }
+      .card {
+        background: white;
+        border-radius: 10px;
+        padding: 28px 32px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+      }
 
-    .card h2 {
-      font-size: 1rem;
-      font-weight: 700;
-      color: #1e40af;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 16px;
-      padding-bottom: 10px;
-      border-bottom: 2px solid #e2e8f0;
-    }
+      .card h2 {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #1e40af;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 16px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #e2e8f0;
+      }
 
-    .endpoint-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
+      .endpoint-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
 
-    .method {
-      background: #16a34a;
-      color: white;
-      font-weight: 700;
-      font-size: 0.8rem;
-      padding: 4px 12px;
-      border-radius: 5px;
-      letter-spacing: 0.04em;
-    }
+      .method {
+        background: #16a34a;
+        color: white;
+        font-weight: 700;
+        font-size: 0.8rem;
+        padding: 4px 12px;
+        border-radius: 5px;
+        letter-spacing: 0.04em;
+      }
 
-    .url {
-      font-family: 'Courier New', monospace;
-      font-size: 0.95rem;
-      color: #1e293b;
-      background: #f1f5f9;
-      padding: 6px 14px;
-      border-radius: 6px;
-      border: 1px solid #e2e8f0;
-    }
+      .url {
+        font-family: "Courier New", monospace;
+        font-size: 0.95rem;
+        color: #1e293b;
+        background: #f1f5f9;
+        padding: 6px 14px;
+        border-radius: 6px;
+        border: 1px solid #e2e8f0;
+      }
 
-    .envs {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 14px;
-    }
+      .envs {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 14px;
+      }
 
-    .env-tag {
-      font-size: 0.78rem;
-      font-weight: 600;
-      padding: 4px 12px;
-      border-radius: 20px;
-      border: 1.5px solid;
-    }
-    .env-tag.qa    { color: #d97706; border-color: #d97706; background: #fffbeb; }
-    .env-tag.stage { color: #7c3aed; border-color: #7c3aed; background: #f5f3ff; }
-    .env-tag.prod  { color: #dc2626; border-color: #dc2626; background: #fef2f2; }
+      .env-tag {
+        font-size: 0.78rem;
+        font-weight: 600;
+        padding: 4px 12px;
+        border-radius: 20px;
+        border: 1.5px solid;
+      }
+      .env-tag.qa {
+        color: #d97706;
+        border-color: #d97706;
+        background: #fffbeb;
+      }
+      .env-tag.stage {
+        color: #7c3aed;
+        border-color: #7c3aed;
+        background: #f5f3ff;
+      }
+      .env-tag.prod {
+        color: #dc2626;
+        border-color: #dc2626;
+        background: #fef2f2;
+      }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.9rem;
-    }
-    th {
-      text-align: left;
-      background: #f8fafc;
-      padding: 10px 14px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: #64748b;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      border-bottom: 2px solid #e2e8f0;
-    }
-    td {
-      padding: 10px 14px;
-      border-bottom: 1px solid #f1f5f9;
-      vertical-align: top;
-    }
-    tr:last-child td { border-bottom: none; }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+      }
+      th {
+        text-align: left;
+        background: #f8fafc;
+        padding: 10px 14px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-bottom: 2px solid #e2e8f0;
+      }
+      td {
+        padding: 10px 14px;
+        border-bottom: 1px solid #f1f5f9;
+        vertical-align: top;
+      }
+      tr:last-child td {
+        border-bottom: none;
+      }
 
-    .field-name {
-      font-family: 'Courier New', monospace;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #1e40af;
-    }
+      .field-name {
+        font-family: "Courier New", monospace;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #1e40af;
+      }
 
-    .required {
-      display: inline-block;
-      background: #fee2e2;
-      color: #dc2626;
-      font-size: 0.68rem;
-      font-weight: 700;
-      padding: 1px 6px;
-      border-radius: 3px;
-      margin-left: 6px;
-      vertical-align: middle;
-    }
+      .required {
+        display: inline-block;
+        background: #fee2e2;
+        color: #dc2626;
+        font-size: 0.68rem;
+        font-weight: 700;
+        padding: 1px 6px;
+        border-radius: 3px;
+        margin-left: 6px;
+        vertical-align: middle;
+      }
 
-    .type {
-      color: #7c3aed;
-      font-family: monospace;
-      font-size: 0.82rem;
-    }
+      .type {
+        color: #7c3aed;
+        font-family: monospace;
+        font-size: 0.82rem;
+      }
 
-    pre {
-      background: #0f172a;
-      color: #e2e8f0;
-      padding: 20px 24px;
-      border-radius: 8px;
-      font-size: 0.84rem;
-      overflow-x: auto;
-      line-height: 1.6;
-    }
+      pre {
+        background: #0f172a;
+        color: #e2e8f0;
+        padding: 20px 24px;
+        border-radius: 8px;
+        font-size: 0.84rem;
+        overflow-x: auto;
+        line-height: 1.6;
+      }
 
-    .key   { color: #93c5fd; }
-    .str   { color: #86efac; }
-    .num   { color: #fcd34d; }
-    .bool  { color: #f9a8d4; }
-    .null  { color: #94a3b8; }
+      .key {
+        color: #93c5fd;
+      }
+      .str {
+        color: #86efac;
+      }
+      .num {
+        color: #fcd34d;
+      }
+      .bool {
+        color: #f9a8d4;
+      }
+      .null {
+        color: #94a3b8;
+      }
 
-    .responses { display: flex; flex-direction: column; gap: 10px; }
+      .responses {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
 
-    .response-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      padding: 12px 16px;
-      border-radius: 8px;
-      border-left: 4px solid;
-    }
-    .response-item.success { background: #f0fdf4; border-color: #22c55e; }
-    .response-item.client  { background: #fffbeb; border-color: #f59e0b; }
-    .response-item.auth    { background: #fef2f2; border-color: #ef4444; }
-    .response-item.server  { background: #f8f8f8; border-color: #94a3b8; }
+      .response-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 12px 16px;
+        border-radius: 8px;
+        border-left: 4px solid;
+      }
+      .response-item.success {
+        background: #f0fdf4;
+        border-color: #22c55e;
+      }
+      .response-item.client {
+        background: #fffbeb;
+        border-color: #f59e0b;
+      }
+      .response-item.auth {
+        background: #fef2f2;
+        border-color: #ef4444;
+      }
+      .response-item.server {
+        background: #f8f8f8;
+        border-color: #94a3b8;
+      }
 
-    .status-code {
-      font-weight: 800;
-      font-size: 1rem;
-      min-width: 40px;
-    }
-    .response-item.success .status-code { color: #16a34a; }
-    .response-item.client  .status-code { color: #d97706; }
-    .response-item.auth    .status-code { color: #dc2626; }
-    .response-item.server  .status-code { color: #64748b; }
+      .status-code {
+        font-weight: 800;
+        font-size: 1rem;
+        min-width: 40px;
+      }
+      .response-item.success .status-code {
+        color: #16a34a;
+      }
+      .response-item.client .status-code {
+        color: #d97706;
+      }
+      .response-item.auth .status-code {
+        color: #dc2626;
+      }
+      .response-item.server .status-code {
+        color: #64748b;
+      }
 
-    .response-desc { font-size: 0.88rem; color: #475569; }
+      .response-desc {
+        font-size: 0.88rem;
+        color: #475569;
+      }
 
-    .auth-box {
-      background: #eff6ff;
-      border: 1px solid #bfdbfe;
-      border-radius: 8px;
-      padding: 14px 18px;
-      font-size: 0.88rem;
-      color: #1e40af;
-    }
-    .auth-box strong { display: block; margin-bottom: 4px; }
+      .auth-box {
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        border-radius: 8px;
+        padding: 14px 18px;
+        font-size: 0.88rem;
+        color: #1e40af;
+      }
+      .auth-box strong {
+        display: block;
+        margin-bottom: 4px;
+      }
 
-    .nested-label {
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: #94a3b8;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      padding: 8px 14px;
-      background: #f8fafc;
-    }
+      .nested-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: 8px 14px;
+        background: #f8fafc;
+      }
 
-    footer {
-      text-align: center;
-      padding: 32px;
-      color: #94a3b8;
-      font-size: 0.82rem;
-    }
-  </style>
-</head>
-<body>
+      footer {
+        text-align: center;
+        padding: 32px;
+        color: #94a3b8;
+        font-size: 0.82rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <p style="font-size: 0.8rem; opacity: 0.7; margin-bottom: 8px">
+        API de Rastreamento — v1.0.0
+      </p>
+      <h1><span class="badge">POST</span> Tracking Events</h1>
+      <p>
+        Endpoint para transportadoras enviarem suass ocorrências de rastreamento
+        para a Arco.
+      </p>
+    </header>
 
-<header>
-  <p style="font-size:0.8rem; opacity:0.7; margin-bottom:8px;">Tracking API — v1.0.0</p>
-  <h1><span class="badge">POST</span> Tracking Events</h1>
-  <p>Endpoint for carriers to send their tracking reports to Arco.</p>
-</header>
+    <div class="container">
+      <!-- Endpoint -->
+      <div class="card">
+        <h2>Endpoint</h2>
+        <div class="endpoint-row">
+          <span class="method">POST</span>
+          <span class="url">/v1/tracking/events</span>
+        </div>
+        <div class="envs">
+          <span class="env-tag qa">QA — supply-api-gw.qa.arcocv.co</span>
+          <span class="env-tag stage"
+            >STAGE — supply-api-gw.stage.arcocv.co</span
+          >
+          <span class="env-tag prod"
+            >PRODUÇÃO — tracking.arcoeducacao.com.br</span
+          >
+        </div>
+      </div>
 
-<div class="container">
+      <!-- Auth -->
+      <div class="card">
+        <h2>Autenticação</h2>
+        <div class="auth-box">
+          <strong>🔑 Chave de API obrigatória</strong>
+          Envie sua chave via header: <code>x-api-key: &lt;api_key&gt;</code>
+        </div>
+      </div>
 
-  <!-- Endpoint -->
-  <div class="card">
-    <h2>Endpoint</h2>
-    <div class="endpoint-row">
-      <span class="method">POST</span>
-      <span class="url">/v1/tracking/events</span>
-    </div>
-    <div class="envs">
-      <span class="env-tag qa">QA — supply-api-gw.qa.arcocv.co</span>
-      <span class="env-tag stage">STAGE — supply-api-gw.stage.arcocv.co</span>
-      <span class="env-tag prod">PROD — tracking.arcoeducacao.com.br</span>
-    </div>
-  </div>
+      <!-- Request Body -->
+      <div class="card">
+        <h2>
+          Body da Requisição
+          <span
+            style="
+              font-weight: 400;
+              color: #94a3b8;
+              font-size: 0.8rem;
+              text-transform: none;
+              letter-spacing: 0;
+            "
+            >application/json</span
+          >
+        </h2>
+        <p style="font-size: 0.88rem; color: #475569; margin-bottom: 16px">
+          Todos os campos de data/hora devem estar em ISO 8601 com uma zona
+          horária explícita: sufixo UTC <code>Z</code> (ex:
+          <code>2024-09-19T15:34:56Z</code>) ou offset <code>±HH:MM</code> (ex:
+          <code>2024-09-19T12:34:56-03:00</code>). Valores sem <code>Z</code> ou
+          offset serão rejeitados pela API.
+        </p>
 
-  <!-- Auth -->
-  <div class="card">
-    <h2>Authentication</h2>
-    <div class="auth-box">
-      <strong>🔑 API Key required</strong>
-      Send your key via header: <code>x-api-key: &lt;api_key&gt;</code>
-    </div>
-  </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Campo</th>
+              <th>Tipo</th>
+              <th>Descrição</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <span class="field-name">data_geracao_evento</span
+                ><span class="required">obrigatório</span>
+              </td>
+              <td><span class="type">string</span></td>
+              <td>
+                Data e hora de geração do evento em formato ISO 8601 (deve
+                incluir <code>Z</code> ou offset).<br /><small
+                  style="color: #94a3b8"
+                  >ex: <code>2024-09-19T12:34:56-03:00</code></small
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><span class="field-name">transportadora</span></td>
+              <td><span class="type">string</span></td>
+              <td>
+                Nome da transportadora. Opcional mas recomendado.<br /><small
+                  style="color: #94a3b8"
+                  >ex: <code>Gbex</code></small
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="field-name">cnpj_transportadora</span
+                ><span class="required">obrigatório</span>
+              </td>
+              <td><span class="type">string</span></td>
+              <td>
+                CNPJ da transportadora (14 dígitos, somente números).<br /><small
+                  style="color: #94a3b8"
+                  >ex: <code>12345678901234</code></small
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="field-name">nota_fiscal</span
+                ><span class="required">obrigatório</span>
+              </td>
+              <td><span class="type">string</span></td>
+              <td>
+                Número da Nota Fiscal relacionada ao envio.<br /><small
+                  style="color: #94a3b8"
+                  >ex: <code>123456</code></small
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="field-name">emissao_conhecimento</span
+                ><span class="required">obrigatório</span>
+              </td>
+              <td><span class="type">string</span></td>
+              <td>
+                Data de emissão do Conhecimento de Transporte em ISO 8601 (deve
+                incluir <code>Z</code> ou offset).<br /><small
+                  style="color: #94a3b8"
+                  >ex: <code>2024-09-18T10:20:30-03:00</code></small
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="field-name">remetente</span
+                ><span class="required">obrigatório</span>
+              </td>
+              <td><span class="type">object</span></td>
+              <td>
+                Informações do remetente. Veja os campos aninhados abaixo.
+              </td>
+            </tr>
+            <tr style="background: #fafafa">
+              <td colspan="3" class="nested-label">↳ campos de remetente</td>
+            </tr>
+            <tr style="background: #fafafa">
+              <td style="padding-left: 32px">
+                <span class="field-name">nome</span
+                ><span class="required">obrigatório</span>
+              </td>
+              <td><span class="type">string</span></td>
+              <td>
+                Nome do remetente.<br /><small style="color: #94a3b8"
+                  >ex: <code>SAE</code></small
+                >
+              </td>
+            </tr>
+            <tr style="background: #fafafa">
+              <td style="padding-left: 32px">
+                <span class="field-name">cnpj</span
+                ><span class="required">obrigatório</span>
+              </td>
+              <td><span class="type">string</span></td>
+              <td>
+                CNPJ do remetente (14 dígitos).<br /><small
+                  style="color: #94a3b8"
+                  >ex: <code>98765432000100</code></small
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><span class="field-name">previsao_de_entrega</span></td>
+              <td><span class="type">string | null</span></td>
+              <td>
+                Data e hora estimada de entrega em ISO 8601 (deve incluir
+                <code>Z</code> ou offset). Omita o campo ou envie
+                <code>null</code> se não disponível.<br /><small
+                  style="color: #94a3b8"
+                  >ex: <code>2024-03-26T16:15:27-03:00</code></small
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><span class="field-name">data_de_entrega</span></td>
+              <td><span class="type">string | null</span></td>
+              <td>
+                Data e hora efetiva de entrega em ISO 8601 (deve incluir
+                <code>Z</code> ou offset) quando a entrega é concluída. Se não
+                houver entrega ainda, envie <code>null</code> ou omita este
+                campo — ambos são aceitos.<br /><small style="color: #94a3b8"
+                  >ex: <code>2024-03-27T16:15:27-03:00</code></small
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="field-name">status</span
+                ><span class="required">obrigatório</span>
+              </td>
+              <td><span class="type">string</span></td>
+              <td>
+                Descrição do status de entrega legível por humanos.<br /><small
+                  style="color: #94a3b8"
+                  >ex: <code>ENTREGA REALIZADA NORMALMENTE</code></small
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="field-name">codigo_status</span
+                ><span class="required">obrigatório</span>
+              </td>
+              <td><span class="type">string</span></td>
+              <td>
+                Código de status interno da transportadora.<br /><small
+                  style="color: #94a3b8"
+                  >ex: <code>1</code></small
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="field-name">events</span
+                ><span class="required">obrigatório</span>
+              </td>
+              <td><span class="type">array of objects</span></td>
+              <td>
+                Lista de todos os eventos de rastreamento para este envio. Veja
+                os campos aninhados abaixo.
+              </td>
+            </tr>
+            <tr style="background: #fafafa">
+              <td colspan="3" class="nested-label">↳ campos de events[ ]</td>
+            </tr>
+            <tr style="background: #fafafa">
+              <td style="padding-left: 32px">
+                <span class="field-name">data_hora</span
+                ><span class="required">obrigatório</span>
+              </td>
+              <td><span class="type">string</span></td>
+              <td>
+                Data e hora do evento em ISO 8601 (deve incluir
+                <code>Z</code> ou offset).<br /><small style="color: #94a3b8"
+                  >ex: <code>2024-03-20T17:38:36-03:00</code></small
+                >
+              </td>
+            </tr>
+            <tr style="background: #fafafa">
+              <td style="padding-left: 32px">
+                <span class="field-name">codigo</span
+                ><span class="required">obrigatório</span>
+              </td>
+              <td><span class="type">string</span></td>
+              <td>
+                Código de evento interno da transportadora.<br /><small
+                  style="color: #94a3b8"
+                  >ex: <code>40</code></small
+                >
+              </td>
+            </tr>
+            <tr style="background: #fafafa">
+              <td style="padding-left: 32px">
+                <span class="field-name">descricao_codigo</span
+                ><span class="required">obrigatório</span>
+              </td>
+              <td><span class="type">string</span></td>
+              <td>
+                Rótulo curto para o código do evento.<br /><small
+                  style="color: #94a3b8"
+                  >ex: <code>EM ROTA</code></small
+                >
+              </td>
+            </tr>
+            <tr style="background: #fafafa">
+              <td style="padding-left: 32px">
+                <span class="field-name">descricao</span
+                ><span class="required">obrigatório</span>
+              </td>
+              <td><span class="type">string</span></td>
+              <td>
+                Descrição completa e legível por humanos do evento.<br /><small
+                  style="color: #94a3b8"
+                  >ex:
+                  <code
+                    >Mercadoria saiu para entrega - Placa CLF9G72</code
+                  ></small
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-  <!-- Request Body -->
-  <div class="card">
-    <h2>Request Body <span style="font-weight:400;color:#94a3b8;font-size:0.8rem;text-transform:none;letter-spacing:0">application/json</span></h2>
-    <p style="font-size:0.88rem;color:#475569;margin-bottom:16px;">All datetime fields must be ISO 8601 with an explicit timezone: UTC suffix <code>Z</code> (e.g. <code>2024-09-19T15:34:56Z</code>) or offset <code>±HH:MM</code> (e.g. <code>2024-09-19T12:34:56-03:00</code>). Values without <code>Z</code> or offset are rejected by the API.</p>
-
-    <table>
-      <thead>
-        <tr>
-          <th>Field</th>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><span class="field-name">data_geracao_evento</span><span class="required">required</span></td>
-          <td><span class="type">string</span></td>
-          <td>Event generation datetime in ISO 8601 format (must include <code>Z</code> or offset).<br><small style="color:#94a3b8">e.g. <code>2024-09-19T12:34:56-03:00</code></small></td>
-        </tr>
-        <tr>
-          <td><span class="field-name">transportadora</span></td>
-          <td><span class="type">string</span></td>
-          <td>Carrier's trade name. Optional but recommended.<br><small style="color:#94a3b8">e.g. <code>Gbex</code></small></td>
-        </tr>
-        <tr>
-          <td><span class="field-name">cnpj_transportadora</span><span class="required">required</span></td>
-          <td><span class="type">string</span></td>
-          <td>Carrier's CNPJ (14 digits, numbers only).<br><small style="color:#94a3b8">e.g. <code>12345678901234</code></small></td>
-        </tr>
-        <tr>
-          <td><span class="field-name">nota_fiscal</span><span class="required">required</span></td>
-          <td><span class="type">string</span></td>
-          <td>Invoice (Nota Fiscal) number related to the shipment.<br><small style="color:#94a3b8">e.g. <code>123456</code></small></td>
-        </tr>
-        <tr>
-          <td><span class="field-name">emissao_conhecimento</span><span class="required">required</span></td>
-          <td><span class="type">string</span></td>
-          <td>Issue date of the bill of lading (Conhecimento de Transporte), in ISO 8601 (must include <code>Z</code> or offset).<br><small style="color:#94a3b8">e.g. <code>2024-09-18T10:20:30-03:00</code></small></td>
-        </tr>
-        <tr>
-          <td><span class="field-name">remetente</span><span class="required">required</span></td>
-          <td><span class="type">object</span></td>
-          <td>Sender information. See nested fields below.</td>
-        </tr>
-        <tr style="background:#fafafa;">
-          <td colspan="3" class="nested-label">↳ remetente fields</td>
-        </tr>
-        <tr style="background:#fafafa;">
-          <td style="padding-left:32px"><span class="field-name">nome</span><span class="required">required</span></td>
-          <td><span class="type">string</span></td>
-          <td>Sender's name.<br><small style="color:#94a3b8">e.g. <code>SAE</code></small></td>
-        </tr>
-        <tr style="background:#fafafa;">
-          <td style="padding-left:32px"><span class="field-name">cnpj</span><span class="required">required</span></td>
-          <td><span class="type">string</span></td>
-          <td>Sender's CNPJ (14 digits).<br><small style="color:#94a3b8">e.g. <code>98765432000100</code></small></td>
-        </tr>
-        <tr>
-          <td><span class="field-name">previsao_de_entrega</span></td>
-          <td><span class="type">string | null</span></td>
-          <td>Estimated delivery datetime in ISO 8601 (must include <code>Z</code> or offset). Omit the field or send <code>null</code> if not available.<br><small style="color:#94a3b8">e.g. <code>2024-03-26T16:15:27-03:00</code></small></td>
-        </tr>
-        <tr>
-          <td><span class="field-name">data_de_entrega</span></td>
-          <td><span class="type">string | null</span></td>
-          <td>Effective delivery datetime in ISO 8601 (must include <code>Z</code> or offset) when the delivery is completed. If there is no delivery yet, send <code>null</code> or omit this field — both are accepted.<br><small style="color:#94a3b8">e.g. <code>2024-03-27T16:15:27-03:00</code></small></td>
-        </tr>
-        <tr>
-          <td><span class="field-name">status</span><span class="required">required</span></td>
-          <td><span class="type">string</span></td>
-          <td>Human-readable delivery status description.<br><small style="color:#94a3b8">e.g. <code>ENTREGA REALIZADA NORMALMENTE</code></small></td>
-        </tr>
-        <tr>
-          <td><span class="field-name">codigo_status</span><span class="required">required</span></td>
-          <td><span class="type">string</span></td>
-          <td>Carrier's internal status code.<br><small style="color:#94a3b8">e.g. <code>1</code></small></td>
-        </tr>
-        <tr>
-          <td><span class="field-name">events</span><span class="required">required</span></td>
-          <td><span class="type">array of objects</span></td>
-          <td>List of all tracking events for this shipment. See nested fields below.</td>
-        </tr>
-        <tr style="background:#fafafa;">
-          <td colspan="3" class="nested-label">↳ events[ ] fields</td>
-        </tr>
-        <tr style="background:#fafafa;">
-          <td style="padding-left:32px"><span class="field-name">data_hora</span><span class="required">required</span></td>
-          <td><span class="type">string</span></td>
-          <td>Datetime of the event in ISO 8601 (must include <code>Z</code> or offset).<br><small style="color:#94a3b8">e.g. <code>2024-03-20T17:38:36-03:00</code></small></td>
-        </tr>
-        <tr style="background:#fafafa;">
-          <td style="padding-left:32px"><span class="field-name">codigo</span><span class="required">required</span></td>
-          <td><span class="type">string</span></td>
-          <td>Carrier's internal event code.<br><small style="color:#94a3b8">e.g. <code>40</code></small></td>
-        </tr>
-        <tr style="background:#fafafa;">
-          <td style="padding-left:32px"><span class="field-name">descricao_codigo</span><span class="required">required</span></td>
-          <td><span class="type">string</span></td>
-          <td>Short label for the event code.<br><small style="color:#94a3b8">e.g. <code>EM ROTA</code></small></td>
-        </tr>
-        <tr style="background:#fafafa;">
-          <td style="padding-left:32px"><span class="field-name">descricao</span><span class="required">required</span></td>
-          <td><span class="type">string</span></td>
-          <td>Full human-readable description of the event.<br><small style="color:#94a3b8">e.g. <code>Mercadoria saiu para entrega - Placa CLF9G72</code></small></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- Example -->
-  <div class="card">
-    <h2>Request Example</h2>
-    <pre><span class="key">{
+      <!-- Example -->
+      <div class="card">
+        <h2>Exemplo de Requisição</h2>
+        <pre><span class="key">{
   "data_geracao_evento"</span>: <span class="str">"2024-09-19T12:34:56-03:00"</span>,
   <span class="key">"transportadora"</span>: <span class="str">"Gbex"</span>,
   <span class="key">"cnpj_transportadora"</span>: <span class="str">"12345678901234"</span>,
@@ -400,34 +620,43 @@
     }
   ]
 }</pre>
-  </div>
+      </div>
 
-  <!-- Responses -->
-  <div class="card">
-    <h2>Responses</h2>
-    <div class="responses">
-      <div class="response-item success">
-        <span class="status-code">202</span>
-        <div class="response-desc"><strong>Accepted</strong> — Request received successfully and will be processed asynchronously.</div>
-      </div>
-      <div class="response-item auth">
-        <span class="status-code">401</span>
-        <div class="response-desc"><strong>Unauthorized</strong> — Missing or invalid API key.</div>
-      </div>
-      <div class="response-item client">
-        <span class="status-code">422</span>
-        <div class="response-desc"><strong>Unprocessable Entity</strong> — One or more required fields are missing or have invalid values.</div>
-      </div>
-      <div class="response-item server">
-        <span class="status-code">500</span>
-        <div class="response-desc"><strong>Internal Server Error</strong> — An unexpected error occurred on the server side.</div>
+      <!-- Responses -->
+      <div class="card">
+        <h2>Responses</h2>
+        <div class="responses">
+          <div class="response-item success">
+            <span class="status-code">202</span>
+            <div class="response-desc">
+              <strong>Accepted</strong> — Requisição recebida com sucesso e será
+              processada de forma assíncrona.
+            </div>
+          </div>
+          <div class="response-item auth">
+            <span class="status-code">401</span>
+            <div class="response-desc">
+              <strong>Unauthorized</strong> — Chave de API ausente ou inválida.
+            </div>
+          </div>
+          <div class="response-item client">
+            <span class="status-code">422</span>
+            <div class="response-desc">
+              <strong>Unprocessable Entity</strong> — Um ou mais campos
+              obrigatórios estão ausentes ou com valores inválidos.
+            </div>
+          </div>
+          <div class="response-item server">
+            <span class="status-code">500</span>
+            <div class="response-desc">
+              <strong>Internal Server Error</strong> — Um erro inesperado
+              ocorreu no servidor.
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 
-</div>
-
-<footer>Tracking API v1.0.0 · Arco Educação</footer>
-
-</body>
+    <footer>API de Rastreamento v1.0.0 · Arco Educação</footer>
+  </body>
 </html>
