@@ -39,8 +39,8 @@ if (ARCO_ENV !== 'test' && ARCO_ENV !== 'prod') {
 
 // URL da API
 const API_URL = ARCO_ENV === 'prod'
-  ? 'https://tracking.arcoeducacao.com.br/v1/tracking/events'
-  : 'http://supply-api-gw.stage.arcocv.co/v1/tracking/events';
+  ? 'https://tracking.arcoeducacao.com.br/v2/tracking/events'
+  : 'http://supply-api-gw.stage.arcocv.co/v2/tracking/events';
 
 // Payload
 const PAYLOAD = {

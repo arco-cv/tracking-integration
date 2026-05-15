@@ -54,15 +54,15 @@ O exemplo atual mostra as variáveis diretamente no código apenas para facilita
 - Verifique se a chave API está correta
 - Confirme que você solicitou a chave para o ambiente correto (`test` ou `prod`)
 
-**Erro: "Bad Request" (400) ou outros erros**
+**Erro: "Unprocessable Entity" (422) ou outros erros**
 - Verifique se os CNPJs estão no formato correto (14 dígitos, sem pontos ou traços)
 - Verifique se todas as datas estão no formato ISO 8601 com timezone (ex: `2024-11-20T14:30:00-03:00`)
-- Verifique se os códigos de ocorrência são válidos (consulte `../codigos_ocorrencia.json`)
+- Verifique se os códigos PROCEDA/OCOREN são válidos (consulte a [tabela de códigos](https://arco-cv.github.io/tracking-integration))
 - Verifique se o campo `nota_fiscal` está preenchido
 - Verifique se o array `events` contém pelo menos um evento
-- Consulte a documentação completa: https://tracking.arcoeducacao.com.br/v1/docs
+- Consulte a documentação completa: https://arco-cv.github.io/tracking-integration
 
 ## Mais Informações
 
-- [Documentação Completa da API](https://tracking.arcoeducacao.com.br/v1/docs)
-- [Códigos de Ocorrência](../codigos_ocorrencia.json)
+- [Documentação Completa da API](https://arco-cv.github.io/tracking-integration)
+- [Códigos PROCEDA/OCOREN](https://arco-cv.github.io/tracking-integration#codigos-proceda-ocoren)

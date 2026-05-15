@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Exemplo de integração para envio de eventos de transporte para Arco Educação.
+Exemplo de integração para envio de eventos de transporte para a API de Rastreamento.
 Usa apenas bibliotecas padrão do Python.
 """
 
@@ -41,7 +41,7 @@ if ARCO_ENV not in ['test', 'prod']:
     sys.exit(1)
 
 # URL da API
-API_URL = 'https://tracking.arcoeducacao.com.br/v1/tracking/events' if ARCO_ENV == 'prod' else 'http://supply-api-gw.stage.arcocv.co/v1/tracking/events'
+API_URL = 'https://tracking.arcoeducacao.com.br/v2/tracking/events' if ARCO_ENV == 'prod' else 'http://supply-api-gw.stage.arcocv.co/v2/tracking/events'
 
 # Payload
 PAYLOAD = {
