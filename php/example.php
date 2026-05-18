@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 /**
- * Exemplo de integração para envio de eventos de transporte para Arco Educação.
+ * Exemplo de integração para envio de eventos de transporte para a API de Rastreamento.
  * Usa apenas bibliotecas padrão do PHP.
  */
 
@@ -45,8 +45,8 @@ if ($ARCO_ENV !== 'test' && $ARCO_ENV !== 'prod') {
 
 // URL da API
 $API_URL = $ARCO_ENV === 'prod'
-    ? 'https://tracking.arcoeducacao.com.br/v1/tracking/events'
-    : 'http://supply-api-gw.stage.arcocv.co/v1/tracking/events';
+    ? 'https://tracking.arcoeducacao.com.br/v2/tracking/events'
+    : 'http://supply-api-gw.stage.arcocv.co/v2/tracking/events';
 
 // Payload
 $PAYLOAD = [

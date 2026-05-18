@@ -273,6 +273,19 @@
         margin-bottom: 4px;
       }
 
+      .warning {
+        background: #fffbeb;
+        border: 1px solid #fbbf24;
+        border-radius: 8px;
+        padding: 16px 18px;
+        font-size: 0.88rem;
+        color: #92400e;
+      }
+      .warning strong {
+        display: block;
+        margin-bottom: 4px;
+      }
+
       .nested-label {
         font-size: 0.75rem;
         font-weight: 700;
@@ -294,7 +307,7 @@
   <body>
     <header>
       <p style="font-size: 0.8rem; opacity: 0.7; margin-bottom: 8px">
-        API de Rastreamento — v1.0.0
+        API de Rastreamento — v2.0.0
       </p>
       <h1><span class="badge">POST</span> Tracking Events</h1>
       <p>
@@ -304,12 +317,20 @@
     </header>
 
     <div class="container">
+      <!-- Deprecation Warning -->
+      <div class="card warning">
+        <strong>⚠️ Aviso de Deprecação</strong>
+        O endpoint <code>/v1/tracking/events</code> está depreciado. Utilize
+        <code>/v2/tracking/events</code>. Integrações existentes em v1 continuam
+        funcionando, mas novas devem usar v2.
+      </div>
+
       <!-- Endpoint -->
       <div class="card">
         <h2>Endpoint</h2>
         <div class="endpoint-row">
           <span class="method">POST</span>
-          <span class="url">/v1/tracking/events</span>
+          <span class="url">/v2/tracking/events</span>
         </div>
         <div class="envs">
           <span class="env-tag qa">QA — supply-api-gw.qa.arcocv.co</span>
@@ -376,12 +397,14 @@
               </td>
             </tr>
             <tr>
-              <td><span class="field-name">transportadora</span></td>
+              <td>
+                <span class="field-name">transportadora</span
+                ><span class="required">obrigatório</span>
+              </td>
               <td><span class="type">string</span></td>
               <td>
-                Nome da transportadora. Opcional mas recomendado.<br /><small
-                  style="color: #94a3b8"
-                  >ex: <code>ARCOEXPRESS</code></small
+                Nome da transportadora.<br /><small style="color: #94a3b8"
+                  >ex: <code>NOME_TRANSPORTADORA</code></small
                 >
               </td>
             </tr>
@@ -507,9 +530,10 @@
               </td>
               <td><span class="type">string</span></td>
               <td>
-                Código de status interno da transportadora.<br /><small
+                Código PROCEDA/OCOREN do status (padrão de mercado, 00–99).
+                Consulte a tabela de códigos abaixo.<br /><small
                   style="color: #94a3b8"
-                  >ex: <code>1</code></small
+                  >ex: <code>01</code></small
                 >
               </td>
             </tr>
@@ -547,7 +571,8 @@
               </td>
               <td><span class="type">string</span></td>
               <td>
-                Código de evento interno da transportadora.<br /><small
+                Código PROCEDA/OCOREN do evento (padrão de mercado, 00–99).
+                Consulte a tabela de códigos abaixo.<br /><small
                   style="color: #94a3b8"
                   >ex: <code>40</code></small
                 >
@@ -555,12 +580,11 @@
             </tr>
             <tr style="background: #fafafa">
               <td style="padding-left: 32px">
-                <span class="field-name">descricao_codigo</span
-                ><span class="required">obrigatório</span>
+                <span class="field-name">descricao_codigo</span>
               </td>
               <td><span class="type">string</span></td>
               <td>
-                Rótulo curto para o código do evento.<br /><small
+                Opcional. Rótulo textual do código PROCEDA/OCOREN.<br /><small
                   style="color: #94a3b8"
                   >ex: <code>EM ROTA</code></small
                 >
@@ -591,7 +615,7 @@
         <h2>Exemplo de Requisição</h2>
         <pre><span class="key">{
   "data_geracao_evento"</span>: <span class="str">"2024-09-19T12:34:56-03:00"</span>,
-  <span class="key">"transportadora"</span>: <span class="str">"ARCOEXPRESS"</span>,
+  <span class="key">"transportadora"</span>: <span class="str">"NOME_TRANSPORTADORA"</span>,
   <span class="key">"cnpj_transportadora"</span>: <span class="str">"12345678901234"</span>,
   <span class="key">"nota_fiscal"</span>: <span class="str">"123456"</span>,
   <span class="key">"emissao_conhecimento"</span>: <span class="str">"2024-09-18T10:20:30-03:00"</span>,
@@ -606,9 +630,9 @@
   <span class="key">"events"</span>: [
     {
       <span class="key">"data_hora"</span>: <span class="str">"2024-03-20T17:38:36-03:00"</span>,
-      <span class="key">"codigo"</span>: <span class="str">"40"</span>,
-      <span class="key">"descricao_codigo"</span>: <span class="str">"EM ROTA"</span>,
-      <span class="key">"descricao"</span>: <span class="str">"Mercadoria saiu para entrega - Placa CLF9G72"</span>
+      <span class="key">"codigo"</span>: <span class="str">"00"</span>,
+      <span class="key">"descricao_codigo"</span>: <span class="str">"PROCESSO DE TRANSPORTE JÁ INICIADO"</span>,
+      <span class="key">"descricao"</span>: <span class="str">"Mercadoria coletada no remetente"</span>
     },
     {
       <span class="key">"data_hora"</span>: <span class="str">"2024-03-26T16:15:27-03:00"</span>,
@@ -653,8 +677,432 @@
           </div>
         </div>
       </div>
+
+      <!-- PROCEDA/OCOREN Codes -->
+      <div class="card">
+        <h2>Códigos PROCEDA/OCOREN</h2>
+        <p style="font-size: 0.88rem; color: #475569; margin-bottom: 16px">
+          PROCEDA/OCOREN é o padrão de mercado brasileiro para eventos
+          logísticos. Utilize esses códigos nos campos
+          <code>codigo_status</code> e <code>events[].codigo</code>.
+        </p>
+        <table>
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Descrição</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>00</td>
+              <td>Processo de Transporte já Iniciado</td>
+            </tr>
+            <tr>
+              <td>01</td>
+              <td>Entrega Realizada Normalmente</td>
+            </tr>
+            <tr>
+              <td>02</td>
+              <td>Recusa por Falta de Pedido de Compra</td>
+            </tr>
+            <tr>
+              <td>03</td>
+              <td>Recusa por Pedido de Compra Cancelado</td>
+            </tr>
+            <tr>
+              <td>04</td>
+              <td>Falta de Espaço Físico no Depósito do Cliente Destino</td>
+            </tr>
+            <tr>
+              <td>05</td>
+              <td>Endereço do Cliente Destino não Localizado</td>
+            </tr>
+            <tr>
+              <td>06</td>
+              <td>Devolução não Autorizada pelo Cliente</td>
+            </tr>
+            <tr>
+              <td>07</td>
+              <td>Preço Mercadoria em Desacordo com o Pedido Compra</td>
+            </tr>
+            <tr>
+              <td>08</td>
+              <td>Mercadoria em Desacordo com o Pedido Compra</td>
+            </tr>
+            <tr>
+              <td>09</td>
+              <td>Área de Risco</td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td>Transportadora não Atende a Cidade do Cliente Destino</td>
+            </tr>
+            <tr>
+              <td>11</td>
+              <td>Mercadoria Sinistrada</td>
+            </tr>
+            <tr>
+              <td>12</td>
+              <td>Pedido de Compras em Duplicidade</td>
+            </tr>
+            <tr>
+              <td>13</td>
+              <td>Mercadorias Trocadas</td>
+            </tr>
+            <tr>
+              <td>14</td>
+              <td>Reentrega Solicitada pelo Cliente</td>
+            </tr>
+            <tr>
+              <td>15</td>
+              <td>Entrega Prejudicada por Horário/Falta de Tempo Hábil</td>
+            </tr>
+            <tr>
+              <td>16</td>
+              <td>Estabelecimento Fechado</td>
+            </tr>
+            <tr>
+              <td>17</td>
+              <td>Mercadoria Devolvida ao Cliente de Origem</td>
+            </tr>
+            <tr>
+              <td>18</td>
+              <td>Nota Fiscal Retida pela Fiscalização</td>
+            </tr>
+            <tr>
+              <td>19</td>
+              <td>Mercadoria Retida até Segunda Ordem</td>
+            </tr>
+            <tr>
+              <td>20</td>
+              <td>Cliente Retira Mercadoria na Transportadora</td>
+            </tr>
+            <tr>
+              <td>21</td>
+              <td>Problema com a Documentação (Nota Fiscal e/ou CTRC)</td>
+            </tr>
+            <tr>
+              <td>22</td>
+              <td>Falta com Busca/Reconferência</td>
+            </tr>
+            <tr>
+              <td>23</td>
+              <td>
+                Quantidade de Produto em Desacordo (Nota Fiscal e/ou Pedido)
+              </td>
+            </tr>
+            <tr>
+              <td>24</td>
+              <td>Extravio de Documentos pela Companhia Aérea</td>
+            </tr>
+            <tr>
+              <td>25</td>
+              <td>Extravio de Carga pela Companhia Aérea</td>
+            </tr>
+            <tr>
+              <td>26</td>
+              <td>Avaria de Carga pela Companhia Aérea</td>
+            </tr>
+            <tr>
+              <td>27</td>
+              <td>Corte de Carga na Pista</td>
+            </tr>
+            <tr>
+              <td>28</td>
+              <td>Aeroporto Fechado na Origem</td>
+            </tr>
+            <tr>
+              <td>29</td>
+              <td>Feriado Local/Nacional</td>
+            </tr>
+            <tr>
+              <td>30</td>
+              <td>Excesso de Veículos</td>
+            </tr>
+            <tr>
+              <td>31</td>
+              <td>Cliente Destino Encerrou Atividades</td>
+            </tr>
+            <tr>
+              <td>32</td>
+              <td>Responsável de Recebimento Ausente</td>
+            </tr>
+            <tr>
+              <td>33</td>
+              <td>Cliente Destino em Greve</td>
+            </tr>
+            <tr>
+              <td>34</td>
+              <td>Aeroporto Fechado no Destino</td>
+            </tr>
+            <tr>
+              <td>35</td>
+              <td>Vôo Cancelado</td>
+            </tr>
+            <tr>
+              <td>36</td>
+              <td>Greve Nacional (Greve Geral)</td>
+            </tr>
+            <tr>
+              <td>37</td>
+              <td>Mercadoria Vencida (Data de Validade Expirada)</td>
+            </tr>
+            <tr>
+              <td>38</td>
+              <td>Confrontos Armados</td>
+            </tr>
+            <tr>
+              <td>39</td>
+              <td>
+                Mercadoria Embarcada sem Conhecimento/Conhecimento não Embarcado
+              </td>
+            </tr>
+            <tr>
+              <td>40</td>
+              <td>Em Rota</td>
+            </tr>
+            <tr>
+              <td>41</td>
+              <td>Quebra do Veículo de Entrega</td>
+            </tr>
+            <tr>
+              <td>42</td>
+              <td>Cliente sem Verba para Pagar o Frete</td>
+            </tr>
+            <tr>
+              <td>43</td>
+              <td>Endereço de Entrega Errado</td>
+            </tr>
+            <tr>
+              <td>44</td>
+              <td>Troca não Disponível</td>
+            </tr>
+            <tr>
+              <td>45</td>
+              <td>Sistema Fora do Ar</td>
+            </tr>
+            <tr>
+              <td>46</td>
+              <td>Cliente Destino não Recebe Pedido Parcial</td>
+            </tr>
+            <tr>
+              <td>47</td>
+              <td>Cliente Destino só Recebe Pedido Parcial</td>
+            </tr>
+            <tr>
+              <td>48</td>
+              <td>Em Transferência Filial Destino</td>
+            </tr>
+            <tr>
+              <td>49</td>
+              <td>Mercadoria Embarcada para Rota Indevida</td>
+            </tr>
+            <tr>
+              <td>50</td>
+              <td>Estrada/Entrada de Acesso Interditada</td>
+            </tr>
+            <tr>
+              <td>51</td>
+              <td>Cliente Destino Mudou de Endereço</td>
+            </tr>
+            <tr>
+              <td>52</td>
+              <td>Avaria Total</td>
+            </tr>
+            <tr>
+              <td>53</td>
+              <td>Avaria Parcial</td>
+            </tr>
+            <tr>
+              <td>54</td>
+              <td>Extravio Total</td>
+            </tr>
+            <tr>
+              <td>55</td>
+              <td>Extravio Parcial</td>
+            </tr>
+            <tr>
+              <td>56</td>
+              <td>Sobra de Mercadoria sem Nota Fiscal</td>
+            </tr>
+            <tr>
+              <td>57</td>
+              <td>Mercadoria em Poder da SUFRAMA para Internação</td>
+            </tr>
+            <tr>
+              <td>58</td>
+              <td>Mercadoria Retirada para Conferência</td>
+            </tr>
+            <tr>
+              <td>59</td>
+              <td>Apreensão Fiscal da Mercadoria</td>
+            </tr>
+            <tr>
+              <td>60</td>
+              <td>Férias Coletivas</td>
+            </tr>
+            <tr>
+              <td>61</td>
+              <td>Recusado, Aguardando Negociação</td>
+            </tr>
+            <tr>
+              <td>62</td>
+              <td>Aguardando Refaturamento das Mercadorias</td>
+            </tr>
+            <tr>
+              <td>63</td>
+              <td>Em Transferência</td>
+            </tr>
+            <tr>
+              <td>64</td>
+              <td>Entrega Programada</td>
+            </tr>
+            <tr>
+              <td>65</td>
+              <td>Aguardando Carta de Correção</td>
+            </tr>
+            <tr>
+              <td>66</td>
+              <td>Recusa por Divergência nas Condições de Pagamento</td>
+            </tr>
+            <tr>
+              <td>67</td>
+              <td>Carga Aguardando Vôo Conexão</td>
+            </tr>
+            <tr>
+              <td>68</td>
+              <td>Carga sem Embalagem Própria para Transporte Aéreo</td>
+            </tr>
+            <tr>
+              <td>69</td>
+              <td>Carga com Dimensão Superior ao Porão da Aeronave</td>
+            </tr>
+            <tr>
+              <td>70</td>
+              <td>Chegada na Cidade ou Filial de Destino</td>
+            </tr>
+            <tr>
+              <td>71</td>
+              <td>Intempéries Climáticas</td>
+            </tr>
+            <tr>
+              <td>72</td>
+              <td>Entrega Agendada</td>
+            </tr>
+            <tr>
+              <td>73</td>
+              <td>Entrega em Andamento</td>
+            </tr>
+            <tr>
+              <td>74</td>
+              <td>Entrega Recusada</td>
+            </tr>
+            <tr>
+              <td>75</td>
+              <td>Coleta em Andamento</td>
+            </tr>
+            <tr>
+              <td>76</td>
+              <td>Coleta Agendada</td>
+            </tr>
+            <tr>
+              <td>77</td>
+              <td>Coleta Realizada</td>
+            </tr>
+            <tr>
+              <td>78</td>
+              <td>Coleta não Realizada</td>
+            </tr>
+            <tr>
+              <td>79</td>
+              <td>Tentativa de Entrega não Realizada</td>
+            </tr>
+            <tr>
+              <td>80</td>
+              <td>Aguardando Retirada do Cliente</td>
+            </tr>
+            <tr>
+              <td>81</td>
+              <td>Mercadoria em Poder de Terceiros</td>
+            </tr>
+            <tr>
+              <td>82</td>
+              <td>Entrega Devolvida ao Remetente</td>
+            </tr>
+            <tr>
+              <td>83</td>
+              <td>Reentrega Agendada</td>
+            </tr>
+            <tr>
+              <td>84</td>
+              <td>Reentrega em Andamento</td>
+            </tr>
+            <tr>
+              <td>85</td>
+              <td>Reentrega Realizada</td>
+            </tr>
+            <tr>
+              <td>86</td>
+              <td>Reentrega não Realizada</td>
+            </tr>
+            <tr>
+              <td>87</td>
+              <td>Entrega Alterada</td>
+            </tr>
+            <tr>
+              <td>88</td>
+              <td>Cancelamento Solicitado pelo Cliente</td>
+            </tr>
+            <tr>
+              <td>89</td>
+              <td>Cancelamento Realizado</td>
+            </tr>
+            <tr>
+              <td>90</td>
+              <td>Rastreamento Indisponível</td>
+            </tr>
+            <tr>
+              <td>91</td>
+              <td>Entrega Confirmada no Sistema</td>
+            </tr>
+            <tr>
+              <td>92</td>
+              <td>Devolução Agendada</td>
+            </tr>
+            <tr>
+              <td>93</td>
+              <td>Devolução em Andamento</td>
+            </tr>
+            <tr>
+              <td>94</td>
+              <td>Devolução Realizada</td>
+            </tr>
+            <tr>
+              <td>95</td>
+              <td>Devolução não Realizada</td>
+            </tr>
+            <tr>
+              <td>96</td>
+              <td>Não Entregável</td>
+            </tr>
+            <tr>
+              <td>97</td>
+              <td>Entrega Parcial</td>
+            </tr>
+            <tr>
+              <td>98</td>
+              <td>Bloqueio Fiscal</td>
+            </tr>
+            <tr>
+              <td>99</td>
+              <td>Outros</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
-    <footer>API de Rastreamento v1.0.0 · Arco Educação</footer>
+    <footer>API de Rastreamento v2.0.0</footer>
   </body>
 </html>
