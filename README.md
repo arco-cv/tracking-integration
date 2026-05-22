@@ -1,5 +1,9 @@
 
 # Documentação Técnica Tracking
+
+<!-- agent-readiness-badge-begin -->
+[![Agent Readiness: ❌ Sem Nota](https://img.shields.io/badge/Agent_Readiness-%E2%9D%8C_Sem_Nota-red)](.claude/docs/agent-readiness-report.md)
+<!-- agent-readiness-badge-end -->
 > O Objetivo deste documento é ajudar tecnicamente as transportadoras na integração de envio de ocorrência de transportes para Arco.
 
 ### Especificação técnica (Payload):
