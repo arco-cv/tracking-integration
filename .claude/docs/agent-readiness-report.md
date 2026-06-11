@@ -1,6 +1,6 @@
 # Agent Readiness Report — tracking-integration
 
-> Gerado em 2026-05-22 | Spec v0.2.0 | Válido por 90 dias (até 2026-08-20)
+> Gerado em 2026-06-11 | Spec v0.2.0 | Válido por 90 dias (até 2026-09-09)
 
 **Tier confirmado:** ❌ Sem Nota
 **Status do próximo tier:** ❌ BLOCKED — 3 criteria failing
